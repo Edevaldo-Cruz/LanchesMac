@@ -132,7 +132,7 @@ namespace LanchesMac.Models
         */
 
         // Metodo para retorna a lista de lanche do carrinho
-        public List<CarrinhoCompraItem> GetCarrinhoCompraItems()
+        public List<CarrinhoCompraItem> GetCarrinhoCompraItens()
         {
             return CarrinhoCompraItems ??
                 (CarrinhoCompraItems =

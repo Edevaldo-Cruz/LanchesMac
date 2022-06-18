@@ -1,4 +1,5 @@
 ﻿using LanchesMac.Context;
+using LanchesMac.Models;
 using LanchesMac.Repositories;
 using LanchesMac.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,9 @@ public class Startup
         //Registrando Repositories como serviço
         services.AddTransient<ILancheRepository, LancheRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+
+        //Registrando serviço class carrinho de compra
+        services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
 
         //Habilitando memoria cache
         services.AddMemoryCache();
