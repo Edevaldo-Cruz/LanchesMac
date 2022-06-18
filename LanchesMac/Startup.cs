@@ -16,10 +16,21 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        //Registrar serviço banco de dados
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+        //Registrando Repositories como serviço
         services.AddTransient<ILancheRepository, LancheRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+
+        //Habilitando memoria cache
+        services.AddMemoryCache();
+
+        //Habilitando Session
+        services.AddSession();
+
+        //Serviço para acessar recurso do HTTPContext
+        services.AddSingleton < IHttpContextAccessor, HttpContextAccessor > ();
         
         services.AddControllersWithViews();
     }
@@ -41,6 +52,9 @@ public class Startup
         app.UseStaticFiles();
 
         app.UseRouting();
+
+        //Habilitando o Session
+        app.UseSession();
 
         app.UseAuthorization();
 
