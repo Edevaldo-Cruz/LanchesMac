@@ -34,11 +34,23 @@ namespace LanchesMac.Controllers
         public IActionResult AdicionarItemNoCarrinho(int lancheId)
         {
             var lancheSeleCionado = _lancheRepository.Lanches
-                .FirstOrDefault(p=> p.LancheId == lancheId);
+                                    .FirstOrDefault(p=> p.LancheId == lancheId);
 
             if (lancheSeleCionado != null)
             {
                 _carrinhoCompra.AdionarAoCarrinho(lancheSeleCionado);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult RemoverItemDoCarrinho(int lancheId)
+        {
+            var lancheSeleCionado = _lancheRepository.Lanches
+                                    .FirstOrDefault(p => p.LancheId == lancheId);
+
+            if (lancheSeleCionado != null)
+            {
+                _carrinhoCompra.RemoverDoCarrinho(lancheSeleCionado);
             }
             return RedirectToAction("Index");
         }
