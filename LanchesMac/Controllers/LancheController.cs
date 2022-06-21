@@ -1,4 +1,5 @@
-﻿using LanchesMac.Repositories.Interfaces;
+﻿using LanchesMac.Models;
+using LanchesMac.Repositories.Interfaces;
 using LanchesMac.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,17 +13,59 @@ namespace LanchesMac.Controllers
             _lancheRepository = lancheRepository;
         }
 
-        public IActionResult List()
-        {            
-            //var lanches = _lancheRepository.Lanches;
-            //var totalLanches = lanches.Count();
-            //return View(lanches);
+        //public IActionResult List()
+        //{            
+        //    //var lanches = _lancheRepository.Lanches;
+        //    //var totalLanches = lanches.Count();
+        //    //return View(lanches);
 
-            var lanchesListViewModel = new LancheListViewModel();
-            lanchesListViewModel.Lanches = _lancheRepository.Lanches;
-            lanchesListViewModel.CategoriaAtual = "Categoria Atual";
+        //    var lanchesListViewModel = new LancheListViewModel();
+        //    lanchesListViewModel.Lanches = _lancheRepository.Lanches;
+        //    lanchesListViewModel.CategoriaAtual = "Categoria Atual";
 
-            return View(lanchesListViewModel);
-        }    
+        //    return View(lanchesListViewModel);
+        //}    
+
+        public IActionResult List(string categoria)
+        {
+            IEnumerable<Lanche> lanches;
+            string categoriaAtual = string.Empty;
+           
+            // Se a variavel categoria estiver null ou vazia
+            if(string.IsNullOrEmpty(categoria))
+            {
+                // Retorna todos os lanches ordenado pelo id.
+                lanches = _lancheRepository.Lanches.OrderBy(l => l.LancheId);
+                categoriaAtual = "Todos os lanches";
+            }
+            else
+            {
+                //Se a variavel categoria for igual a Normal 
+                if(string.Equals("Normal", categoria, StringComparison.OrdinalIgnoreCase))
+                {
+                    //Filtra e retorna lanches normais
+                    lanches = _lancheRepository.Lanches
+                        .Where(l => l.Categoria.CategoriaNome.Equals("Normal"))
+                        .OrderBy(l => l.LancheId);
+                }
+                else
+                {
+                    //Filtra e retorna lanches naturais
+                    lanches = _lancheRepository.Lanches
+                        .Where(l => l.Categoria.CategoriaNome.Equals("Natural"))
+                        .OrderBy(l => l.LancheId);
+                }
+                    categoriaAtual = categoria;
+            }
+
+            var lancheListViewModel = new LancheListViewModel
+            {
+                Lanches = lanches,
+                CategoriaAtual = categoriaAtual,
+            };
+
+            return View(lancheListViewModel);
+
+        }
     }
 }
