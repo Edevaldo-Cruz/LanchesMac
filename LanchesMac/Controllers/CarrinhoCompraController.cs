@@ -8,10 +8,10 @@ namespace LanchesMac.Controllers
     public class CarrinhoCompraController : Controller
     {
         private readonly ILancheRepository _lancheRepository;
-
         private readonly CarrinhoCompra _carrinhoCompra;
 
-        public CarrinhoCompraController(ILancheRepository lancheRepository, CarrinhoCompra carrinhoCompra)
+        public CarrinhoCompraController(ILancheRepository lancheRepository,
+            CarrinhoCompra carrinhoCompra)
         {
             _lancheRepository = lancheRepository;
             _carrinhoCompra = carrinhoCompra;
@@ -30,30 +30,28 @@ namespace LanchesMac.Controllers
 
             return View(carrinhoCompraVM);
         }
-
-        public IActionResult AdicionarItemNoCarrinho(int lancheId)
+        public IActionResult AdicionarItemNoCarrinhoCompra(int lancheId)
         {
-            var lancheSeleCionado = _lancheRepository.Lanches
-                                    .FirstOrDefault(p=> p.LancheId == lancheId);
-
-            if (lancheSeleCionado != null)
-            {
-                _carrinhoCompra.AdionarAoCarrinho(lancheSeleCionado);
-            }
-            return RedirectToAction("Index");
-        }
-
-        public IActionResult RemoverItemDoCarrinho(int lancheId)
-        {
-            var lancheSeleCionado = _lancheRepository.Lanches
+            var lancheSelecionado = _lancheRepository.Lanches
                                     .FirstOrDefault(p => p.LancheId == lancheId);
 
-            if (lancheSeleCionado != null)
+            if (lancheSelecionado != null)
             {
-                _carrinhoCompra.RemoverDoCarrinho(lancheSeleCionado);
+                _carrinhoCompra.AdicionarAoCarrinho(lancheSelecionado);
             }
             return RedirectToAction("Index");
         }
 
+        public IActionResult RemoverItemDoCarrinhoCompra(int lancheId)
+        {
+            var lancheSelecionado = _lancheRepository.Lanches
+                                    .FirstOrDefault(p => p.LancheId == lancheId);
+
+            if (lancheSelecionado != null)
+            {
+                _carrinhoCompra.RemoverDoCarrinho(lancheSelecionado);
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

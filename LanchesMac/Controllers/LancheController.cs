@@ -13,18 +13,20 @@ namespace LanchesMac.Controllers
             _lancheRepository = lancheRepository;
         }
 
-        //public IActionResult List()
-        //{            
-        //    //var lanches = _lancheRepository.Lanches;
-        //    //var totalLanches = lanches.Count();
-        //    //return View(lanches);
+        /* 
+            Codigo Refatorado
+        public IActionResult List()
+        {
+            //var lanches = _lancheRepository.Lanches;
+            //var totalLanches = lanches.Count();
+            //return View(lanches);
 
-        //    var lanchesListViewModel = new LancheListViewModel();
-        //    lanchesListViewModel.Lanches = _lancheRepository.Lanches;
-        //    lanchesListViewModel.CategoriaAtual = "Categoria Atual";
+            var lanchesListViewModel = new LancheListViewModel();
+            lanchesListViewModel.Lanches = _lancheRepository.Lanches;
+            lanchesListViewModel.CategoriaAtual = "Categoria Atual";
 
-        //    return View(lanchesListViewModel);
-        //}    
+            return View(lanchesListViewModel);
+        }*/
 
         public IActionResult List(string categoria)
         {
@@ -40,6 +42,8 @@ namespace LanchesMac.Controllers
             }
             else
             {
+                /*
+                    Codigo refaturado                 
                 //Se a variavel categoria for igual a Normal 
                 if(string.Equals("Normal", categoria, StringComparison.OrdinalIgnoreCase))
                 {
@@ -55,6 +59,12 @@ namespace LanchesMac.Controllers
                         .Where(l => l.Categoria.CategoriaNome.Equals("Natural"))
                         .OrderBy(l => l.LancheId);
                 }
+                */
+
+                lanches = _lancheRepository.Lanches
+                    .Where(l => l.Categoria.CategoriaNome.Equals(categoria))
+                    .OrderBy(c => c.Nome);
+
                     categoriaAtual = categoria;
             }
 
@@ -64,8 +74,16 @@ namespace LanchesMac.Controllers
                 CategoriaAtual = categoriaAtual,
             };
 
-            return View(lancheListViewModel);
+            return View(lancheListViewModel);          
 
         }
+
+        public IActionResult Details(int lancheId)
+        {
+            var lanche = _lancheRepository.Lanches.FirstOrDefault(l => l.LancheId == lancheId);
+            return View(lanche);
+        }
+
+
     }
 }

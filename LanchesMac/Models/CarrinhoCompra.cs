@@ -26,7 +26,7 @@ namespace LanchesMac.Models
             var context = services.GetService<AppDbContext>();
 
             // Obtem ou gera o Id do carrinho
-            string carrinhoId = session.GetString("Carrinho") ?? Guid.NewGuid().ToString();
+            string carrinhoId = session.GetString("CarrinhoId") ?? Guid.NewGuid().ToString();
 
             // Atribui o id do carrinho na Sessão
             session.SetString("CarrinhoId", carrinhoId);
@@ -39,16 +39,14 @@ namespace LanchesMac.Models
         }
 
         // Metodo adiciona um objeto tipo lanche no carrinho
-        public void AdionarAoCarrinho(Lanche lanche)
+        public void AdicionarAoCarrinho(Lanche lanche)
         {
             // Verifica se o lanche existe no carrinho
             var carrinhoCompraItem =
-                _context.CarrinhoCompraItens.SingleOrDefault(
-                    // Exitem um item lanche com o mesmo ID e um carrinho Compra com o mesmo ID?
+                _context.CarrinhoCompraItens.SingleOrDefault(                   
                     s => s.Lanche.LancheId == lanche.LancheId &&
                     s.CarrinhoCompraId == CarrinhoCompraId);
-
-            // Se o item não existe, o item vai ser igual a null
+           
             if (carrinhoCompraItem == null)
             {
                 carrinhoCompraItem = new CarrinhoCompraItem

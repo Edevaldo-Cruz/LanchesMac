@@ -62,8 +62,14 @@ public class Startup
 
         app.UseAuthorization();
 
+        //Configuração de rotas
         app.UseEndpoints(endpoints =>
-        {
+        {         
+            endpoints.MapControllerRoute(
+                name: "categoriaFiltro",
+                pattern: "Lanche/{action}/{categoria?}",
+                defaults: new { controller = "Lanches", action = "List" });
+
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
